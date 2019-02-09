@@ -82,6 +82,8 @@ module.exports = (robot) ->
       'slack'
     else if (robot.adapterName == 'rocketchat')
       'rocketchat'
+    else if (robot.adapterName == 'botframework')
+      'msteams'
     else
       ''
   isUploadSupported = site() != ''
@@ -340,6 +342,22 @@ module.exports = (robot) ->
       # Hipchat
       when 'hipchat'
         msg.send "#{title}: #{link} - #{image}"
+      when 'botframework'
+        msg.send {
+          attachments: [
+            {
+              fallback: "#{title}: #{image} - #{link}",
+              title: title,
+              title_link: link,
+              image_url: image,
+              images: [
+                url: image
+              ],
+              msl: image,
+            }
+          ],
+          unfurl_links: false
+        }
       # BearyChat
       when 'bearychat'
         robot.emit 'bearychat.attachment', {
